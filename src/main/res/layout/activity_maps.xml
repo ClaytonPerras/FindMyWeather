@@ -34,6 +34,7 @@
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintVertical_bias="1.0" />
 
+
     <TextView
         android:id="@+id/cityText"
         android:layout_width="wrap_content"
@@ -43,10 +44,10 @@
         android:textSize="20dp"
         map:layout_constraintBottom_toTopOf="@+id/map"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.042"
+        map:layout_constraintHorizontal_bias="0.037"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        map:layout_constraintVertical_bias="0.831" />
+        map:layout_constraintVertical_bias="0.792" />
 
     <TextView
         android:id="@+id/temp"
@@ -57,10 +58,24 @@
         android:textSize="20dp"
         map:layout_constraintBottom_toTopOf="@+id/map"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.369"
+        map:layout_constraintHorizontal_bias="0.436"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        map:layout_constraintVertical_bias="0.831" />
+        map:layout_constraintVertical_bias="0.792" />
+
+    <TextView
+        android:id="@+id/tempHigh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="102dp"
+        android:text="High"
+        android:textSize="20dp"
+        map:layout_constraintBottom_toTopOf="@+id/map"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.425"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.965" />
 
     <TextView
         android:id="@+id/unittemp"
@@ -71,9 +86,38 @@
         android:textSize="20dp"
         map:layout_constraintBottom_toTopOf="@+id/map"
         map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.731"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        map:layout_constraintVertical_bias="0.831" />
+        map:layout_constraintVertical_bias="0.792" />
+
+    <TextView
+        android:id="@+id/unittemp2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="102dp"
+        android:text="Unit"
+        android:textSize="20dp"
+        map:layout_constraintBottom_toTopOf="@+id/map"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.731"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.965" />
+
+    <TextView
+        android:id="@+id/weatherState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="102dp"
+        android:text="Weather State"
+        android:textSize="20dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.056"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.416" />
 
     <Button
         android:id="@+id/getCityID"

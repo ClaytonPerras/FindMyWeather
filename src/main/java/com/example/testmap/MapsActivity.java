@@ -33,20 +33,20 @@ import java.util.ArrayList;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    double gLatt, gLong;
     EditText location;
-    TextView cityText, minTempText, unitTemp;
+    TextView cityText, minTempText, unitTemp, tempHigh, weather_state, unitTemp2;
     Button getCityID, weatherByID;
     String locationID;
+    SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         location = findViewById(R.id.location);
         cityText = findViewById(R.id.cityText);
@@ -55,6 +55,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         unitTemp.setText("C");
         getCityID = findViewById(R.id.getCityID);
         weatherByID = findViewById(R.id.weatherByID);
+        tempHigh = findViewById(R.id.tempHigh);
+        weather_state = findViewById(R.id.weatherState);
+        unitTemp2 = findViewById(R.id.unittemp2);
+        unitTemp2.setText("C");
 
         getCityID.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,9 +90,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng cityLattLong = new LatLng(gLatt, gLong);
+        mMap.addMarker(new MarkerOptions().position(cityLattLong).title("Your Marker"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(cityLattLong));
     }
 
     public void getData() {
@@ -101,15 +105,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(JSONArray response) {
                 String cityID = "";
-                String latt_long = "";
                 try {
                     // Retrieves city ID to be used to grab weather info
                     JSONObject cityInfo = response.getJSONObject(0);
                     cityID = cityInfo.getString("woeid");
                     locationID = cityID;
-                    // Retrieves lat long to be used with Google Maps
-                    JSONObject latt_longInfo = response.getJSONObject(0);
-                    latt_long = latt_longInfo.getString("latt_long");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -136,17 +136,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            // Grabbing JSON array of weaather
                             JSONArray consolidated_weather_list = response.getJSONArray("consolidated_weather");
-
-                            //Get first item
+                            //Grabbing latt-long of city for Google Maps
+                            String latt_long = response.get("latt_long").toString();
+                            String lattC = latt_long.substring( 0, latt_long.indexOf(","));
+                            String longC = latt_long.substring(latt_long.indexOf(",")+1, latt_long.length());
+                            gLatt = Double.parseDouble(lattC);
+                            gLong = Double.parseDouble(longC);
+                            System.out.println(gLatt);
+                            System.out.println(gLong);
+                            //Get first weather day item
                             JSONObject first_day = (JSONObject) consolidated_weather_list.get(0);
                             String min_temp = first_day.getString("min_temp");
+                            String max_temp = first_day.getString("max_temp");
+                            // Convert high and low temp to float for rounding then back to string
+                            float floatMaxTemp = Float.parseFloat(max_temp);
+                            float roundMaxTemp = Math.round((floatMaxTemp*100)/100);
+                            String finalMaxTemp = Float.toString(roundMaxTemp);
+                            String weatherState = first_day.getString("weather_state_name");
                             float floatMinTemp = Float.parseFloat(min_temp);
                             float roundMinTemp = Math.round((floatMinTemp*100)/100);
                             String finalMinTemp = Float.toString(roundMinTemp);
+                            // Set text views with new data
                             cityText.setText(location.getText().toString());
-                            minTempText.setText(finalMinTemp);
-                            Toast.makeText(MapsActivity.this, finalMinTemp, Toast.LENGTH_SHORT).show();
+                            minTempText.setText("Low: "+finalMinTemp);
+                            tempHigh.setText("High: "+finalMaxTemp);
+                            weather_state.setText(weatherState);
+                            mapFragment.getMapAsync(MapsActivity.this::onMapReady);
+                            Toast.makeText(MapsActivity.this, longC, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -160,5 +178,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
         queue.add(request);
+        System.out.println(gLatt);
+        System.out.println(gLong);
     }
 }
